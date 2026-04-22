@@ -27,36 +27,34 @@ Serving the HTML pages.
 Testing the webserver
 
 ## PROGRAM:
+## Server.py
 ```
-from http.server import HTTPServer,BaseHTTPRequestHandler
+import socket
+HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
+PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.bind((HOST, PORT))
+    s.listen()
+    conn, addr = s.accept()
+    with conn:
+        print(f"Connected by {addr}")
+        while True:
+            data = conn.recv(1024)
+            if not data:
+                break
+            conn.sendall(data)
+```
+## Client.py
+```
+import socket
+HOST = "127.0.0.1"  
+PORT = 65432  
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.connect((HOST, PORT))
+    s.sendall(b"Name: RABI BASKAR PRABURAJAN, Date: 22-04-2026, Reg No: 212224040257")
+    data = s.recv(1024)
 
-content='''
-<!doctype html>
-<html>
-<head>
-<title> My Web Server</title>
-</head>
-<body>
-<h1>Top Five Web Application Development Frameworks</h1>
-<h2>1.Django</h2>
-<h2>2. MEAN Stack</h2>
-<h2>3. React </h2>
-</body>
-</html>
-
-
-class MyServer(BaseHTTPRequestHandler):
-    def do_GET(self):
-        print("Get request received...")
-        self.send_response(200) 
-        self.send_header("content-type", "text/html")       
-        self.end_headers()
-        self.wfile.write(content.encode())
-
-print("This is my webserver") 
-server_address =('keerthi',2323)
-httpd = HTTPServer(server_address,MyServer)
-httpd.serve_forever()
+print(f"Received {data!r}")
 ```
 ##  Architecture Diagram
 
@@ -87,8 +85,12 @@ httpd.serve_forever()
 
 ## OUTPUT:
 ### CLIENT OUTPUT:
+<img width="1600" height="997" alt="image" src="https://github.com/user-attachments/assets/f782c589-39cc-4cd3-b681-20c7e8ecbbcb" />
+
 
 ### SERVER OUTPUT:
+<img width="1600" height="999" alt="image" src="https://github.com/user-attachments/assets/4c7d68f4-fe2e-46bc-8e1c-6f324b8c4c13" />
+
 
 ## RESULT:
 The program is executed succesfully
